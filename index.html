@@ -106,20 +106,19 @@
   }
   .door.left .knob{ right:auto; left:20%; }
 
-  /* แสงเต็มจอ ค่อยๆ เพิ่ม */
+  /* แสงเต็มจอเริ่มเหลือง แล้วค่อยขาวจนบังประตู */
   .light {
     position:fixed;
     top:0; left:0; right:0; bottom:0;
-    background: radial-gradient(circle at center, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0) 100%);
+    background: radial-gradient(circle at center, rgba(255,255,150,0.8) 0%, rgba(255,240,180,0.6) 50%, rgba(255,200,120,0.3) 100%);
     opacity:0;
-    transition: opacity 1.2s ease-in;
-    z-index:1;
+    z-index:4;
     pointer-events:none;
+    transition: background 1.2s ease, opacity 1.2s ease;
   }
 
   .opened .door.left{ transform: rotateY(-95deg) translateZ(-10px); }
   .opened .door.right{ transform: rotateY(95deg) translateZ(-10px); }
-  .opened ~ .light { opacity:1; background: radial-gradient(circle at center, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 100%); }
 
   .cue{
     position:absolute;
@@ -160,13 +159,12 @@
     opened = true;
     wrapper.classList.add('opened');
 
-    // ค่อยๆ ทำแสงเต็มจอเป็นขาวจั๊ว
-    light.style.transition = "opacity 1.2s ease-in";
+    // เริ่มแสงเหลืองแล้วค่อยๆ ขาว
     light.style.opacity = "1";
+    light.style.transition = "background 1.2s ease, opacity 1.2s ease";
     light.style.background = "radial-gradient(circle at center, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 100%)";
 
-    // ดีเลย์ก่อนไปหน้า birthday
-    setTimeout(()=>{ window.location.href = 'หน้าเค้ก.html'; }, 1300);
+    setTimeout(()=>{ window.location.href = 'https://log-in-lac.vercel.app/'; }, 1300);
   }
 
   left.addEventListener('click', openDoor);
