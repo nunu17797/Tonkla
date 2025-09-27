@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ประตู → เปิดไปงานวันเกิด</title>
+<style>
+  :root{
+    --bg:#fef9f3; /* ครีมอ่อน */
+    --door-wood1: linear-gradient(180deg,#9a5a2b,#7a4120);
+    --door-wood2: linear-gradient(180deg,#8a4f24,#6e3b1b);
+  }
+
+  html,body{
+    height:100%;
+    margin:0;
+    font-family:"Sarabun", system-ui, Arial, sans-serif;
+    background: var(--bg);
+    color:#333;
+    overflow:hidden;
+  }
+
+  .stage{
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    perspective:1400px;
+    position:relative;
+  }
+
+  /* ข้อความบนประตู */
+  .instruction{
+    position:absolute;
+    top:40px;
+    width:100%;
+    text-align:center;
+    font-size:20px;
+    font-weight:600;
+    color:#5a3e1b;
+    letter-spacing:1px;
+    text-shadow: 1px 1px 4px rgba(255,255,255,0.6);
+    z-index:3;
+  }
+
+  .door-wrapper{
+    width:360px;
+    max-width:80vw;
+    height:520px;
+    position:relative;
+    transform-style:preserve-3d;
+    z-index:2;
+  }
+
+  .frame{
+    position:absolute;
+    inset:0;
+    border-radius:10px;
+    box-shadow: inset 0 10px 30px rgba(0,0,0,0.2), 0 20px 60px rgba(0,0,0,0.15);
+  }
+
+  .door {
+    position:absolute;
+    top:12px;
+    bottom:12px;
+    width:50%;
+    transform-origin: left center;
+    transform-style:preserve-3d;
+    transition: transform 1200ms cubic-bezier(.2,.9,.3,1);
+    border-radius:6px;
+    box-shadow:0 8px 18px rgba(0,0,0,0.4);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    backface-visibility:hidden;
+    overflow:hidden;
+    background: #855;
+  }
+  .door.right{
+    right:12px;
+    left:auto;
+    transform-origin:right center;
+  }
+
+  .door.left .panel-inner{ background: var(--door-wood1); }
+  .door.right .panel-inner{ background: var(--door-wood2); }
+
+  .panel-inner{
+    width:96%;
+    height:96%;
+    border-radius:6px;
+    position:relative;
+  }
+
+  .knob{
+    position:absolute;
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    right:20%;
+    top:50%;
+    transform:translateY(-50%);
+    background: radial-gradient(circle at 35% 30%, #fff5c9, #d1b26a 40%, #a57f44 100%);
+    box-shadow:0 4px 6px rgba(0,0,0,0.4);
+  }
+  .door.left .knob{ right:auto; left:20%; }
+
+  /* แสงเต็มจอ ค่อยๆ เพิ่ม */
+  .light {
+    position:fixed;
+    top:0; left:0; right:0; bottom:0;
+    background: radial-gradient(circle at center, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0) 100%);
+    opacity:0;
+    transition: opacity 1.2s ease-in;
+    z-index:1;
+    pointer-events:none;
+  }
+
+  .opened .door.left{ transform: rotateY(-95deg) translateZ(-10px); }
+  .opened .door.right{ transform: rotateY(95deg) translateZ(-10px); }
+  .opened ~ .light { opacity:1; background: radial-gradient(circle at center, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 100%); }
+
+  .cue{
+    position:absolute;
+    bottom:-40px;
+    width:100%;
+    text-align:center;
+    font-size:14px;
+    color:#555;
+  }
+</style>
+</head>
+<body>
+  <div class="instruction">กดหน้าจอ 1 ทีเพื่อเปิดประตู</div>
+
+  <div class="stage">
+    <div class="door-wrapper" id="doorWrapper">
+      <div class="frame"></div>
+      <div class="door left" id="doorLeft">
+        <div class="panel-inner"><div class="knob"></div></div>
+      </div>
+      <div class="door right" id="doorRight">
+        <div class="panel-inner"><div class="knob"></div></div>
+      </div>
+      <div class="cue">คลิกที่ประตูเพื่อเปิด →</div>
+    </div>
+    <div class="light" id="light"></div>
+  </div>
+
+<script>
+  const wrapper = document.getElementById('doorWrapper');
+  const left = document.getElementById('doorLeft');
+  const right = document.getElementById('doorRight');
+  const light = document.getElementById('light');
+  let opened = false;
+
+  function openDoor(){
+    if(opened) return;
+    opened = true;
+    wrapper.classList.add('opened');
+
+    // ค่อยๆ ทำแสงเต็มจอเป็นขาวจั๊ว
+    light.style.transition = "opacity 1.2s ease-in";
+    light.style.opacity = "1";
+    light.style.background = "radial-gradient(circle at center, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 100%)";
+
+    // ดีเลย์ก่อนไปหน้า birthday
+    setTimeout(()=>{ window.location.href = 'หน้าเค้ก.html'; }, 1300);
+  }
+
+  left.addEventListener('click', openDoor);
+  right.addEventListener('click', openDoor);
+</script>
+</body>
+</html>
